@@ -7,4 +7,9 @@ const registerValidasi = Joi.object({
     token: Joi.string().max(1000).optional()
 })
 
-export{registerValidasi}
+const loginValidasi = Joi.object({
+    username: Joi.string().max(100).required(),
+    password: Joi.string().max(255).required(),
+})
+
+export{registerValidasi , loginValidasi}
