@@ -22,4 +22,27 @@ const login = async(req,res,next)=> {
     }
 }
 
-export default {register,login}
+const get = async(req,res,next)=> {
+    try {
+        const username = req.user.username
+        const result = await userService.get(username)
+        res.status(200).json({
+            data: result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+const logout = async(req,res,next)=> {
+    try {
+        await userService.logout(req.user.username)
+        res.status(200).json({
+            data : "Sukses LOGOUT"
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+export default {register,login,get,logout}

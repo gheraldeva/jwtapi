@@ -12,4 +12,6 @@ const loginValidasi = Joi.object({
     password: Joi.string().max(255).required(),
 })
 
-export{registerValidasi , loginValidasi}
+const getValidasi = Joi.string().max(100).required()
+
+export{registerValidasi , loginValidasi, getValidasi}

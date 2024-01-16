@@ -1,5 +1,5 @@
 import { prisma } from "../config/database.js"
-import { loginValidasi, registerValidasi } from "../validasi/validasiuser.js"
+import { getValidasi, loginValidasi, registerValidasi } from "../validasi/validasiuser.js"
 import bcrypt from "bcrypt"
 import {validate} from "../validasi/validation.js"
 import { ResponseError } from "../responerror.js"
@@ -76,4 +76,50 @@ const login = async (req, res) => {
 
 }
 
-export default {register,login}
+const get = async (username) => {
+    username = validate(getValidasi, username)
+
+    const user = await prisma.user.findUnique({
+        where : {
+            username : username
+        },
+        select : {
+            username : true,
+            email : true
+        }
+    })
+    console.log(user);
+
+    if(!user){
+        throw new ResponseError(408 , "user not found")
+    }
+    return user;
+}
+
+const logout = async (username) => {
+    username = validate(getValidasi, username)
+
+    const user = await prisma.user.findUnique({
+        where : {
+            username : username
+        }
+    })
+
+    if(!user) {
+        throw new ResponseError(404, "user not found")
+    }
+
+    return prisma.user.update({
+        where : {
+            username : username
+        },data : {
+            token : null
+        },
+        select : {
+            username : true
+        }
+    })
+
+}
+
+export default {register,login, get,logout}
