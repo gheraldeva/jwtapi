@@ -1,5 +1,5 @@
 import { prisma } from "../config/database.js"
-import { getValidasi, loginValidasi, registerValidasi } from "../validasi/validasiuser.js"
+import { getValidasi, loginValidasi, registerValidasi, updateValidasi } from "../validasi/validasiuser.js"
 import bcrypt from "bcrypt"
 import {validate} from "../validasi/validation.js"
 import { ResponseError } from "../responerror.js"
@@ -60,7 +60,7 @@ const login = async (req, res) => {
         username : user.username,
         email : user.email},"alpingay")
 
-    console.log(user.email);
+    
     
     return prisma.user.update({
         data : {
@@ -88,7 +88,6 @@ const get = async (username) => {
             email : true
         }
     })
-    console.log(user);
 
     if(!user){
         throw new ResponseError(408 , "user not found")
@@ -122,4 +121,49 @@ const logout = async (username) => {
 
 }
 
-export default {register,login, get,logout}
+const update = async (req,username) => {
+    const user = await (updateValidasi , req)
+
+    const totalUser = await prisma.user.count({
+        where : {
+            username : username
+        }
+    })
+
+
+    if(totalUser != 1) {
+        throw new ResponseError(404 , "User not found")
+    }
+
+    const data = {}
+ 
+    if(user.username){
+        data.username = user.username
+    }
+    if(user.email){
+        data.email = user.email
+    }
+    if(user.password){
+        data.password = await bcrypt.hash(user.password , 10)
+    }
+    console.log(data);
+
+    return prisma.user.update({
+        where : {
+            username : username
+        },
+        data : data,
+        select : {
+            username : true,
+            email : true,
+            password : true
+        }
+
+    })
+}
+
+const remove = async (req,username) => {
+    const user = validate
+}
+
+export default {register,login, get,logout,update}
