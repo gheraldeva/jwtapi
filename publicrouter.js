@@ -8,6 +8,7 @@ userRouter.use(authMiddleware)
 userRouter.get('/api/current' , userController.get)
 userRouter.patch('/api/current' , userController.update)
 userRouter.delete('/api/logout' , userController.logout)
+userRouter.delete('/api/current' , userController.remove)
 
 
 export{userRouter}

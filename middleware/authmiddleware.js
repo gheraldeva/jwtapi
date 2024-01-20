@@ -3,7 +3,7 @@ import { prisma } from '../config/database.js'
 export const authMiddleware = async(req, res, next) => {
     const header = req.get('Authorization')
     const token = header && header.split(" ")[1]
-    console.log(token);
+
     if(!token) {
         res.status(401).json({
             errors : "Token gaada cuii"
@@ -14,7 +14,7 @@ export const authMiddleware = async(req, res, next) => {
                 token : token
             }
         })
-        console.log(user);
+
         if(!user) {
             res.status(401).json({
                 errors : "User not found"

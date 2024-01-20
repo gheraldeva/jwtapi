@@ -146,7 +146,6 @@ const update = async (req,username) => {
     if(user.password){
         data.password = await bcrypt.hash(user.password , 10)
     }
-    console.log(data);
 
     return prisma.user.update({
         where : {
@@ -163,7 +162,24 @@ const update = async (req,username) => {
 }
 
 const remove = async (req,username) => {
-    const user = validate
+    const user = validate(getValidasi, username)
+
+    const totalUser = await prisma.user.count({
+        where:{
+            username : username
+        }
+    })
+    console.log(totalUser);
+
+    if (totalUser != 1){
+        throw new ResponseError(404 , "User not Found")
+    }
+
+    return prisma.user.delete({
+        where : {
+            username : username
+        }
+    })
 }
 
-export default {register,login, get,logout,update}
+export default {register,login, get,logout,update,remove}
