@@ -24,8 +24,8 @@ const login = async(req,res,next)=> {
 
 const get = async(req,res,next)=> {
     try {
-        const username = req.user.username
-        const result = await userService.get(username)
+        const username = req.body.username
+        const result = await userService.get(username)        
         res.status(200).json({
             data: result
         })
@@ -64,7 +64,6 @@ const remove = async (req,res,next) => {
     try {
         const request = req.body
         const username = request.username
-        console.log(username);
         await userService.remove(request , username)
         res.status(200).json({
             data : "user deleted"
@@ -73,5 +72,6 @@ const remove = async (req,res,next) => {
         next(error)
     }
 }
+
 
 export default {register,login,get,logout,update,remove}

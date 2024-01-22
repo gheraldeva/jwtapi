@@ -85,7 +85,8 @@ const get = async (username) => {
         },
         select : {
             username : true,
-            email : true
+            email : true,
+            role: true
         }
     })
 
@@ -169,7 +170,6 @@ const remove = async (req,username) => {
             username : username
         }
     })
-    console.log(totalUser);
 
     if (totalUser != 1){
         throw new ResponseError(404 , "User not Found")
@@ -181,5 +181,6 @@ const remove = async (req,username) => {
         }
     })
 }
+
 
 export default {register,login, get,logout,update,remove}
